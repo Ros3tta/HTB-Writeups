@@ -60,7 +60,7 @@ Unfortunetly we only have username `admin`, after trying a couple common combina
 
 I saw this in `http://10.10.10.75/nibbleblog/content/private/config.xml`:<br>
 ![image](https://github.com/user-attachments/assets/6257d40c-d085-4340-bf8d-e178299a1f8b)
-And after trying `admin:nibbles` at the login form (`http://10.10.10.75/nibbleblog/admin.php`)<br>
+<br>And after trying `admin:nibbles` at the login form (`http://10.10.10.75/nibbleblog/admin.php`)<br>
 We got redirected to the dashboard
 # Exploitation
 Now that we have the credentials, we can fire `msfconsole` and use the module to get a reverse shell:<br>
