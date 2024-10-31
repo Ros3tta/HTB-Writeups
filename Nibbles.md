@@ -60,17 +60,24 @@ Unfortunetly we only have username `admin`, after trying a couple common combina
 
 I saw this in `http://10.10.10.75/nibbleblog/content/private/config.xml`:<br>
 ![image](https://github.com/user-attachments/assets/6257d40c-d085-4340-bf8d-e178299a1f8b)
+<hr>
 
 And after trying `admin:nibbles` at the login form (`http://10.10.10.75/nibbleblog/admin.php`)<br>
 We got redirected to the dashboard
 # Exploitation
 Now that we have the credentials, we can fire `msfconsole` and use the module to get a reverse shell:<br>
 ![image](https://github.com/user-attachments/assets/6c3f9f09-0807-4cd0-854f-fcc12197fa27)
+<hr>
+
 Select it:
 ![image](https://github.com/user-attachments/assets/4873443b-6381-47af-bf15-b14a9e9fd95e)
+<hr>
+
 And finally set the options & run it:<br>
 ![image](https://github.com/user-attachments/assets/33fb797a-cc19-4864-be9c-ca613cdd60d8)
-Once the terminal shows `meterpreter >` we can type "`shell`" to get a reverse shell<br>
+<hr>
+
+Once the terminal shows `meterpreter >` we can type `shell` to get a reverse shell<br>
 # Post-Exploitation
 After that we can run `python3 -c 'import pty; pty.spawn("/bin/sh")'` in order to get interactive shell
 We run as the user "`nibbler`" and going to the `/home` directory and inside nibbler, we can get the `user.txt` flag
