@@ -61,10 +61,10 @@ I try `dirsearch` just to be sure but no luck either
 ```
 # Vulnerability Assessment
 The server was running `Apache 2.4.41` and using `PHP 8.1.0-dev`
-Looking up `php 8.1.0 exploit` leads to this:                
+Looking up `php 8.1.0 exploit` leads to this:<br>
 https://www.exploit-db.com/exploits/49933
 
-The cause of the exploit was an early realease which contained a backdoor
+The cause of the exploit was an early realease which contained a backdoor<br>
 The backdoor was removed but any server that still runs this version allows an attacker to execute arbitrary code by sending the `User-Agentt` header
 # Exploitation
 Running the exploit, it asked for full URL: `http://10.10.10.242/`
@@ -82,7 +82,8 @@ In that case, i opened `netcat` listner on port 4444 and executed reverse shell 
 Having reverse shell from `nc`, i upgraded to `interactive shell`
 `python3 -c 'import pty; pty.spawn("/bin/sh")'`
 
-There was only 1 directory inside `/home` called `james` (which is who we are - `whoami`), the user flag can be found inside `/home/james/user.txt`
+There was only 1 directory inside `/home` called `james` (which is who we are - `whoami`)<br>
+The user flag can be found inside `/home/james/user.txt`
 After that i started checking common things but the exploits for them didn't work
 - `sudo --version` (sudo version)
 - `uname -a` (system information)
@@ -92,7 +93,7 @@ Running `sudo -l` to see what i can run as sudo led to this
 User james may run the following commands on knife:
     (root) NOPASSWD: /usr/bin/knife
 ```
-Looking up `usr/bin/knife exploit` gave me this
+Looking up `usr/bin/knife exploit` gave me this:<br>
 https://gtfobins.github.io/gtfobins/knife/
 
 Running the `sudo knife exec -E 'exec "/bin/sh"'` allowed me to become root
