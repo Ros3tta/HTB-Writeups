@@ -10,7 +10,7 @@ PING 10.10.10.242 (10.10.10.242) 56(84) bytes of data.
 64 bytes from 10.10.10.242: icmp_seq=3 ttl=63 time=110 ms
 64 bytes from 10.10.10.242: icmp_seq=4 ttl=63 time=109 ms
 ```
-After confirming good connection i ran `nmap` with `-Pn` to skip testing if the target is alive and `-sVC` for version and additional information
+After that i ran `nmap` with `-Pn` to skip testing if the target is alive and `-sVC` for version and additional information<br>
 `nmap -sVC -Pn 10.10.10.242`
 ```
 Nmap scan report for 10.10.10.242
@@ -25,19 +25,19 @@ PORT   STATE SERVICE VERSION
 |_http-server-header: Apache/2.4.41 (Ubuntu)
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
-I also ran `whatweb` with `-a 3` for aggressive (comprehensive) information gathering about the website
+I also ran `whatweb` with `-a 3` for aggressive (comprehensive) information gathering about the website<br>
 `whatweb -a 3 10.10.10.242`
 ```
 http://10.10.10.242 [200 OK] Apache[2.4.41], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.41 (Ubuntu)], IP[10.10.10.242], PHP[8.1.0-dev], Script, Title[Emergent Medical Idea], X-Powered-By[PHP/8.1.0-dev]
 ```
-The website didn't appear to have any links or directories so i try dirbusting with `feroxbuster` but no use either
+The website didn't appear to have any links or directories so i try dirbusting with `feroxbuster` but no use either<br>
 `feroxbuster -r -k -E -g -C 400,403,404 --auto-tune -u http://10.10.10.242/`
 ```
 200      GET      220l      526w     5815c http://10.10.10.242/
 [####################] - 68s    30002/30002   0s      found:1       errors:0      
 [####################] - 67s    30000/30000   447/s   http://10.10.10.242/ 
 ```
-I try `dirsearch` just to be sure but no luck either
+I try `dirsearch` just to be sure but no luck either<br>
 `dirsearch -F --crawl -u http://10.10.10.242/`
 ```
 [12:10:02] 403 -  277B  - /.ht_wsr.txt                                      
