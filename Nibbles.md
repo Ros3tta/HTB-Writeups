@@ -10,7 +10,7 @@ PING 10.10.10.75 (10.10.10.75) 56(84) bytes of data.
 64 bytes from 10.10.10.75: icmp_seq=3 ttl=63 time=108 ms
 64 bytes from 10.10.10.75: icmp_seq=4 ttl=63 time=108 ms
 ```
-After that i run nmap with `-Pn` to not check if the host is alive and `-sVC` for version and script enumeration:<br>
+After that i ran nmap with `-Pn` to not check if the host is alive and `-sVC` for version and script enumeration:<br>
 `nmap -sVC -Pn 10.10.10.75`
 ```
 Nmap scan report for 10.10.10.75
@@ -60,8 +60,6 @@ Unfortunetly we only have username `admin`, after trying a couple common combina
 
 I saw this in `http://10.10.10.75/nibbleblog/content/private/config.xml`:<br>
 ![image](https://github.com/user-attachments/assets/6257d40c-d085-4340-bf8d-e178299a1f8b)
-<hr>
-
 And after trying `admin:nibbles` at the login form (`http://10.10.10.75/nibbleblog/admin.php`)<br>
 We got redirected to the dashboard
 # Exploitation
