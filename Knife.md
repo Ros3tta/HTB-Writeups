@@ -1,4 +1,5 @@
 <b>
+
 # Information Gathering
 I started by pinging the box 4 times to ensure stable connection
 `ping -c 4 10.10.10.242`
