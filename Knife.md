@@ -61,7 +61,7 @@ I try `dirsearch` just to be sure but no luck either
 ```
 # Vulnerability Assessment
 The server was running `Apache 2.4.41` and using `PHP 8.1.0-dev`
-Looking up `php 8.1.0 exploit` leads to this:
+Looking up `php 8.1.0 exploit` leads to this:                
 https://www.exploit-db.com/exploits/49933
 
 The cause of the exploit was an early realease which contained a backdoor
