@@ -53,4 +53,23 @@ https://www.exploit-db.com/exploits/38489
 
 The exploit allows RCE due to upload vulnerability that allows to upload a reverse shell<br>
 It is mentioned that there is `metasploit` module and for the exploit to work, we need to be authenticated<br>
+Unfortunetly we only have username `admin`, after trying a couple common combinations:<br>
+- `admin:admin`
+- `admin:root`
+- `admin:test`
+
+I saw this in `http://10.10.10.75/nibbleblog/content/private/config.xml`:<br>
+![image](https://github.com/user-attachments/assets/6257d40c-d085-4340-bf8d-e178299a1f8b)
+
+And after trying `admin:nibbles` at the login form (`http://10.10.10.75/nibbleblog/admin.php`)<br>
+We got redirected to the dashboard
+Now that we have the credentials, we can fire `msfconsole` and use the module to get a reverse shell:<br>
+![image](https://github.com/user-attachments/assets/6c3f9f09-0807-4cd0-854f-fcc12197fa27)
+Select it:
+![image](https://github.com/user-attachments/assets/4873443b-6381-47af-bf15-b14a9e9fd95e)
+And finally set the options & run it:
+![image](https://github.com/user-attachments/assets/33fb797a-cc19-4864-be9c-ca613cdd60d8)
+Once the terminal shows `meterpreter >` we can type "`shell`" to get a reverse shell<br>
+After that we can run `python3 -c 'import pty; pty.spawn("/bin/sh")'` in order to get interactive shell
+
 </b>
