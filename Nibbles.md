@@ -30,7 +30,7 @@ Then i ran `whatweb` to gather additional information about the website:<br>
 ```
 http://10.10.10.75 [200 OK] Apache[2.4.18], Country[RESERVED][ZZ], HTTPServer[Ubuntu Linux][Apache/2.4.18 (Ubuntu)], IP[10.10.10.75]
 ```
-After checking the source code for the page i found this:
+After checking the source code for the page i found this:<br>
 ![image](https://github.com/user-attachments/assets/cea217ff-0f73-4330-9765-f02383d391aa)
 
 Browsing to the directory revealed blog page<br>
@@ -45,6 +45,12 @@ Two of them revealed login information:
 http://10.10.10.75/nibbleblog/content/private/users.xml
 http://10.10.10.75/nibbleblog/content/private/config.xml
 ```
-And one revealed the version of `Nibbleblog`:<br>
+And one revealed the version of `Nibbleblog` was 4.0.3:<br>
 `http://10.10.10.75/nibbleblog/README`
+# Vulnerability Assessment
+Looking up "`Nibbleblog 4.0.3 explot`" gave me this:<br>
+https://www.exploit-db.com/exploits/38489
+
+The exploit allows RCE due to upload vulnerability that allows to upload a reverse shell<br>
+It is mentioned that there is `metasploit` module and for the exploit to work, we need to be authenticated<br>
 </b>
