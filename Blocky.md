@@ -46,10 +46,17 @@ Most of the files were part of WordPress so they didnt really matter<br>
 - `BlockyCore.jar`
 - `griefprevention-1.11.2-3.1.1.298.jar`
 
-The second one didnt really matter
-Extracting the `BlockyCore.jar` and looking inside, there is a file called `BlockyCore.class` located at `/com/myfirstplugin/`<br>
+The second one didnt really matter<br>
+Extracting the `BlockyCore.jar` and looking inside<br>
+There is a file called `BlockyCore.class` located at `/com/myfirstplugin/`<br>
+<hr>
+
 Running `strings BlockyCore.class` outputs this:<br>
 ![image](https://github.com/user-attachments/assets/d7b41f42-a89c-4ae4-b5d2-d843e74baeb7)
+
+`8YsqfCTnvxAUeduzjNSXe22` is right below `root` and `localhost`, it can be assumed this is a password<br>
+since only `ssh` is open, we can try `ssh root@/10.10.10.37` and then submit the string as password<br>
+
 
 
 
