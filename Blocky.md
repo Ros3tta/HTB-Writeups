@@ -35,7 +35,23 @@ After that i also ran `whatweb` scan to get additional information:<br>
 http://blocky.htb [200 OK] Apache[2.4.18], Country[RESERVED][ZZ], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.18 (Ubuntu)], IP[10.10.10.37], JQuery[1.12.4], MetaGenerator[WordPress 4.8], PoweredBy[WordPress,WordPress,], Script[text/javascript], Title[BlockyCraft &#8211; Under Construction!], UncommonHeaders[link], WordPress[4.7.8,4.7.9,4.8]
 ```
 Since there is a domain, i tried fuzzing for subdomains but it didn't work:<br>
-`ffuf -w STW_20k.txt:FUZZ -u http://10.10.10.37/ -H 'Host: FUZZ.blocky.htb' -ac`
+`ffuf -w STW_20k.txt:FUZZ -u http://10.10.10.37/ -H 'Host: FUZZ.blocky.htb' -ac`<br>
+Back to the website, i started dirbusting with `feroxbuster`:<br>
+`feroxbuster -r -k -E -g -C 400,403,404,500,502,503 --auto-tune -u http://blocky.htb/`
+And found that directory listing was enabled
+Most of the files were part of WordPress so they didnt really matter<br>
+![image](https://github.com/user-attachments/assets/5f91d95a-a592-4ad4-ba97-dea1741d28a1)
+
+2 files however were unusual:
+- `BlockyCore.jar`
+- `griefprevention-1.11.2-3.1.1.298.jar`
+
+The second one didnt really matter
+Extracting the `BlockyCore.jar` and looking inside, there is a file called `BlockyCore.class` located at `/com/myfirstplugin/`<br>
+Running `strings BlockyCore.class` outputs this:<br>
+![image](https://github.com/user-attachments/assets/d7b41f42-a89c-4ae4-b5d2-d843e74baeb7)
+
+
 
 
 </b>
