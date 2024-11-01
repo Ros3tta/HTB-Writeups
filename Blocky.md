@@ -1,5 +1,5 @@
-![image](https://github.com/user-attachments/assets/2baeb2b0-9373-4b54-a138-9b63c5a8e113)<b>
-
+<b>
+  
 # Information Gathering
 I start by pinging the target 4 times:<br>
 `ping -c 4 10.10.10.37`
